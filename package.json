@@ -1,0 +1,15 @@
+{
+  "name": "algorithm-exercise",
+  "version": "1.0.0",
+  "description": "algorithm exercise",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "npx http-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "algorithm"
+  ],
+  "author": "hufei",
+  "license": "ISC"
+}
