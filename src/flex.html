@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body{
+            height: 100%;
+        }
+        .flex{
+            height: 40vh;
+            background-color: honeydew;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .flex .item{
+            flex:1;}
+        .item{
+            width: 600px;
+            background-color: indianred;
+        }
+
+        .grid{
+            display: grid;
+        }
+    </style>
+</head>
+<body>
+    /mnt/c/Users/H/AppData/Local/Programs?Microsoft VS Code/bin
+    <div class="flex">
+        <p class="item"> item1 </p>
+
+        <p class="item"> item2 </p>
+        <span class="item"> item3</span>
+    </div>
+
+    <div class="grid">
+        <p class="item"> item1 </p>
+
+        <p class="item"> item2 </p>
+        <span class="item"> item3</span>
+    </div>
+</body>
+</html>
