@@ -38,7 +38,6 @@ function factory( arr ){
     var curLevels = [tree];
     while( i < arr.length ){
         current = new TreeNode(arr[i]);
-
     }
     for(var i = 0; i < arr.length; i++){
         tree = new TreeNode(arr[i]);
