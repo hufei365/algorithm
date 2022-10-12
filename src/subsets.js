@@ -24,6 +24,10 @@
  * @param {number[]} nums
  * @return {number[][]}
  */
+
+/**
+ * 递归法
+ */
 var subsets = function (nums) {
     function doWalk(subArr){
         const subResults = [];
@@ -42,5 +46,24 @@ var subsets = function (nums) {
     
     return results;
 };
+
+/**
+ * 穷举法
+ */
+
+function subsets2(nums){
+    const n = nums.length, results = [];
+
+    for(let mask = 0; mask < (1<<n); mask++){
+        const item = [];
+        for(let i = 0; i < n; i++){
+            if( mask & (1<<i)){
+                item.push(nums[i])
+            }
+        }
+        results.push(item)
+    }
+    return results
+}
 
 console.log(subsets([1,2,3]));
