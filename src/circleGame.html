@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>circleGame</title>
+    <style>
+        canvas {
+            margin: 30;
+        }
+        body{
+            display: flex;
+            flex-direction: row;
+        }
+        ul {
+            list-style: none;
+
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="tutorial" width="2000" height="2000"></canvas>
+    <div>
+        <h3>Toys</h3>
+        <textarea name="toys" id="toys" cols="100" rows="10" >
+            [[9,49,8],[60,67,8],[21,48,5],[100,15,3],[58,34,5],[76,5,5],[73,37,8],[54,61,8],[57,40,4],[33,88,9],[22,38,5],[34,65,8],[7,88,8],[83,59,8],[64,49,9],[9,43,7],[93,12,10],[17,80,3],[14,27,6],[67,32,4],[80,18,2],[39,51,6],[92,15,2],[56,68,9],[14,88,3],[74,71,9],[43,22,4],[55,58,3],[47,62,1],[6,18,1],[10,77,4],[99,86,8],[6,36,3],[64,73,4],[58,90,8],[80,15,7],[84,32,7],[26,95,10],[9,61,7],[42,60,1],[64,0,9],[35,39,1],[23,79,8],[89,32,8],[19,39,1],[85,18,10],[21,35,6],[85,32,3],[40,80,4],[63,90,5],[84,36,8],[84,77,6],[78,16,3],[25,49,5],[71,22,10],[26,84,1],[22,48,4],[20,99,3],[47,46,5],[47,1,4],[15,2,9],[14,33,3],[63,87,9],[95,56,8],[72,84,9],[94,27,9],[60,5,1],[71,60,3],[26,75,9],[82,28,10],[85,22,5],[50,49,6],[90,0,4],[39,64,5],[60,43,4],[74,16,10],[34,32,5],[99,22,7],[87,75,6],[34,55,3],[93,49,5],[92,99,6],[52,70,7],[84,93,1],[99,75,6],[99,50,7],[61,18,2],[80,39,7],[16,40,10],[96,96,4],[81,88,1],[1,41,1],[73,100,5],[85,98,4],[12,63,1],[14,6,5],[6,20,10],[12,76,5],[6,6,1],[69,25,3]]    
+        </textarea>
+        <h3>Circles</h3>
+        <textarea name="circles" id="circles" cols="100" rows="10">
+            [[8,11],[91,9],[45,46],[11,69],[70,5],[61,45],[96,16],[77,71],[26,32],[62,71],[10,47],[13,79],[4,94],[94,31],[85,99],[8,27],[94,34],[11,81],[71,35],[77,35],[85,70],[90,41],[32,56],[22,11],[18,7],[90,49],[23,6],[58,16],[61,51],[72,23],[93,69],[55,61],[39,97],[19,79],[35,8],[54,26],[63,26],[52,32],[71,0],[24,44],[61,61],[25,69],[9,56],[5,55],[65,70],[37,97],[97,18],[40,51],[6,26],[89,30],[94,53],[14,34],[27,91],[30,34],[28,56],[45,86],[92,39],[86,49],[25,79],[1,79],[87,23],[40,20],[65,47],[17,50],[89,10],[51,27],[9,69],[92,0],[72,21],[8,13],[0,86],[68,98],[12,48],[96,67],[59,89],[88,17],[41,86],[35,76],[1,81],[20,99],[33,60],[38,78],[26,14],[96,80],[14,14],[49,86],[43,22],[80,72],[34,12],[82,56],[17,85],[29,1],[2,50],[20,0],[23,13],[24,51],[44,75],[33,15],[6,82],[82,93]]
+        </textarea>
+        <h3>r</h3>
+        <input type="number" name="radius" id="radius" value="4">
+        <br /><br /><br />
+        <button onClick="clearCanvas()"> reset </button>
+        <button onClick="render()" > renderAll </button>
+        <button onClick="renderCircles()" > renderCircles </button>
+        <br /><br /><br />
+        <button onClick="zoom(10)"> zoom+</button>
+        <button onClick="zoom(-10)"> zoom-</button>
+        <br /><br /><br />
+        <h3>max render count of toy</h3>
+        <input type="number" name="maxcount" id="maxrendercount" value="10">
+        <button onClick="renderToy()">render next</button>
+        <h3>current render toys is: </h3>
+        <ul id="renderToys">
+
+        </ul>
+
+    </div>
+
+    <script>
+        let step = 10
+        const WIDTH = 2000
+        const PIANYI = 10
+        const canvas = document.getElementById('tutorial');
+        const ctx = canvas.getContext('2d');
+
+
+        const toysEl = document.getElementById('toys')
+        const circlesEl = document.getElementById('circles')
+        const radiusEl = document.getElementById('radius')
+        let radiusVal = radiusEl.value
+        const maxCountEl = document.getElementById('maxrendercount')
+        const renderToysEl = document.getElementById('renderToys')
+        let curIndex = 0;
+
+
+        initialCoordination();
+
+        function render(){
+            const toys = JSON.parse(toysEl.value) 
+
+            renderCircles();
+
+            toys.forEach(([x, y, r])=>{
+                drawCircle((x+PIANYI)*step, (y+PIANYI)*step, r*step, getRandomRGB())
+            })
+        }
+        function renderToy(){
+            clearCanvas();
+            renderCircles();
+            renderToysEl.innerHTML = ''
+            const toys = JSON.parse(toysEl.value) 
+            const toysCount = toys.length
+            const maxCount = maxCountEl.value
+            let i;
+            for(i = curIndex; (i-curIndex) < maxCount && i < toysCount; i++){
+                const [x, y, r] = toys[i]
+                if(r > radiusVal) continue
+                drawCircle((x+PIANYI)*step, (y+PIANYI)*step, r*step, getRandomRGB())
+                const li = document.createElement('li')
+                li.innerHTML = `${i+1}: [${x}, ${y}, ${r}]`
+                renderToysEl.appendChild(li);
+            }
+            curIndex = i;
+            if(curIndex === toysCount){
+                curIndex = 0;
+            }
+        }
+
+        function renderCircles(){
+            const circles = JSON.parse(circlesEl.value) 
+            radiusVal = Number(radiusEl.value)
+
+            circles.forEach(([x, y])=>{
+                drawCircle((x+PIANYI)*step, (y+PIANYI)*step, radiusVal*step, "rgba(0,0,0,0.1)")
+            })
+        }
+        
+        function initialCoordination() {
+            ctx.beginPath();
+            for(let i = WIDTH;i >=0 ; i-=step){
+                drawLine([0, i], [WIDTH, i])
+                drawLine([i, 0], [i, WIDTH])
+            }
+            ctx.closePath()
+        }
+        
+        function drawLine(start, end){
+            ctx.beginPath()
+            ctx.moveTo(start[0]+0.5, start[1]+0.5)
+            ctx.lineTo(end[0]+0.5, end[1]+0.5)
+            ctx.stroke();
+            ctx.closePath()
+
+        }
+
+        function drawCircle(x, y, r = step, color = 'black'){
+            ctx.fillStyle=color
+            ctx.beginPath()
+            ctx.moveTo(x+0.5, y+0.5)
+            ctx.arc(x - r+0.5, y+0.5, r, 0, Math.PI * 2, true);
+            ctx.stroke()
+            ctx.fill()
+            ctx.closePath()
+        }
+
+        function clearCanvas() {
+            ctx.closePath();
+            ctx.clearRect(0, 0, WIDTH, WIDTH)
+            initialCoordination();
+        }
+
+        function zoom(zoomOut){
+            if(zoomOut > 0 ){
+                step += 10
+            } else {
+                step -= 10
+            }
+            if(step < 5 ){
+                step = 5
+            }
+            clearCanvas();
+            render();
+        }
+
+        function getRandomRGB(){
+            const r = Math.floor(Math.random() * 256)
+            const g = Math.floor(Math.random() * 256)
+            const b = Math.floor(Math.random() * 256)
+            return `rgba(${255}, ${g}, ${b}, 0.8)`;
+        }
+    </script>
+</body>
+
+</html>
